@@ -12,7 +12,6 @@ while (true) {
         if ($operStack->isEmpty()) {
             $operStack->push($val);
         } else {
-            //echo $operStack->pop();
             /**判断优先级，运算符*/
             /**获取栈顶的值的优先级*/
             $proVal = $operStack->pro($operStack->getTop());
