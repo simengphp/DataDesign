@@ -1,5 +1,5 @@
 <?php
-$ret = '3+4*3-2';
+$ret = '3+4*5-2';
 $index=0;
 $numStack = new Stack(); //定义一个数栈
 $operStack = new Stack(); //定义一个符号栈
@@ -9,20 +9,22 @@ while (true) {
     /**判断是数字还是符号*/
     if ($isNumStr) {
         /**如果栈为空那么将直接入栈*/
-        if (!$operStack->isEmpty()) {
+        if ($operStack->isEmpty()) {
             $operStack->push($val);
         } else {
+            //echo $operStack->pop();
             /**判断优先级，运算符*/
             /**获取栈顶的值的优先级*/
             $proVal = $operStack->pro($operStack->getTop());
             /**获取当前符号的优先级*/
             $operY = $operStack->pro($val);
-            /**当前的运算符的优先级小于栈顶运算符的优先级，就计算*/
-            if ($operY >= $proVal) {
+            /**当前的运算符的优先级小于栈顶运算符的优先级，就计算，否则将直接入栈*/
+            if ($operY <= $proVal) {
                 $num1 = $numStack->pop();
                 $num2 = $numStack->pop();
+                $operVal = $operStack->pop();
                 /**计算好的结果存入数栈*/
-                $countNum = $operStack->countNum($num1, $num2, $val);
+                $countNum = $operStack->countNum($num1, $num2, $operVal);
                 $numStack->push($countNum);
                 /**把当前扫描的符号存入栈中*/
                 $operStack->push($val);
@@ -33,7 +35,6 @@ while (true) {
     } else {
         $numStack->push($val);
     }
-
     $index++;
     if ($index == strlen($ret)) {
         break;
@@ -88,6 +89,7 @@ class Stack
     /**计算*/
     public function countNum($num1, $num2, $oper)
     {
+        $ret = 0;
         switch ($oper) {
             case "+":
                 $ret = $num1+$num2;
@@ -119,7 +121,7 @@ class Stack
         }
     }
 
-        /**入栈操作
+    /**入栈操作
      * @param $val入栈的值
      */
     public function push($val)
